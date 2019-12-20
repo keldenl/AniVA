@@ -1,0 +1,145 @@
+html,body {
+  height:100%;
+  color: #dfdfdf;
+  background: black;
+  margin: 0;
+  padding: 0;
+  /* color: #333; */
+  font-family: "SF Pro Display","SF Pro Icons","Helvetica Neue","Helvetica","Arial",sans-serif;
+  transition: all .1s ease-in-out;
+}
+
+#root { height: 100%; }
+
+.app { text-align: center; }
+
+.app.home {
+  text-align: center;
+  height: 85%;
+  display: table;
+  margin: auto;
+  width: 70%;
+  max-width: 600px;
+}
+
+.header {
+  background-color: #191919;
+  margin: 0;
+  margin-left: 250px;
+
+  flex-direction: row;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.header.home {
+  margin: auto;
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  background-color: black;
+}
+
+.header.home > .logo {
+  font-size: 5em;
+}
+
+.header.home .search > #queryBox, .header.home .search > button {
+  height: 46px;
+}
+
+.header.conflict { margin: 0!important; }
+
+.logo { margin: 0; transition: color .35s ease-in-out; }
+.logo:hover { cursor: pointer; color: #1aa8bb; }
+.sublogo {
+  margin-bottom: 20px;
+  color: gray;
+  font-size: .8em;
+  display: none;
+}
+.header.home > .sublogo { display: block; }
+
+.search {
+  flex-grow: 1;
+  display: flex;
+}
+
+#queryBox {
+  -webkit-appearance: none;
+  appearance: none;
+  outline: none;
+  border: none;
+  box-shadow: none;
+
+  flex-grow: 1;
+  background-color: #313131;
+  color: white;
+  height: 36px;
+  padding: 0 12px;
+  margin: 0 10px;
+  font-size: 1em;
+  transition: all .2s ease-in-out;
+
+}
+
+#queryBox:hover, #queryBox:focus { 
+  background-color: #3f3f3f; 
+}
+
+/* #queryBox:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 41px #3f3f3f inset !important;
+  -webkit-text-fill-color: white;
+} */
+
+#queryBox:focus {
+  -webkit-box-shadow: inset 0 -2px 0 0 #1aa8bc;
+  -moz-box-shadow: inset 0 -2px 0 0 #1aa8bc;
+  box-shadow: inset 0 -2px 0 0 #1aa8bc;
+}
+
+.search > button {
+  -webkit-appearance: none;
+  appearance: none;
+  outline: none;
+  border: none;
+  box-shadow: none;
+
+  background-color: #1aa8bb;
+  color: white;
+  font-weight: 600;
+
+
+  background-size: 40% 40%;
+  background-position: center center;
+  background-image: url("data:image/svg+xml;base64, PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDQ3NS4wODQgNDc1LjA4NCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNDc1LjA4NCA0NzUuMDg0OyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIgY2xhc3M9IiI+PGc+PGc+Cgk8cGF0aCBkPSJNNDY0LjUyNCw0MTIuODQ2bC05Ny45MjktOTcuOTI1YzIzLjYtMzQuMDY4LDM1LjQwNi03Mi4wNDcsMzUuNDA2LTExMy45MTdjMC0yNy4yMTgtNS4yODQtNTMuMjQ5LTE1Ljg1Mi03OC4wODcgICBjLTEwLjU2MS0yNC44NDItMjQuODM4LTQ2LjI1NC00Mi44MjUtNjQuMjQxYy0xNy45ODctMTcuOTg3LTM5LjM5Ni0zMi4yNjQtNjQuMjMzLTQyLjgyNiAgIEMyNTQuMjQ2LDUuMjg1LDIyOC4yMTcsMC4wMDMsMjAwLjk5OSwwLjAwM2MtMjcuMjE2LDAtNTMuMjQ3LDUuMjgyLTc4LjA4NSwxNS44NDdDOTguMDcyLDI2LjQxMiw3Ni42Niw0MC42ODksNTguNjczLDU4LjY3NiAgIGMtMTcuOTg5LDE3Ljk4Ny0zMi4yNjQsMzkuNDAzLTQyLjgyNyw2NC4yNDFDNS4yODIsMTQ3Ljc1OCwwLDE3My43ODYsMCwyMDEuMDA0YzAsMjcuMjE2LDUuMjgyLDUzLjIzOCwxNS44NDYsNzguMDgzICAgYzEwLjU2MiwyNC44MzgsMjQuODM4LDQ2LjI0Nyw0Mi44MjcsNjQuMjM0YzE3Ljk4NywxNy45OTMsMzkuNDAzLDMyLjI2NCw2NC4yNDEsNDIuODMyYzI0Ljg0MSwxMC41NjMsNTAuODY5LDE1Ljg0NCw3OC4wODUsMTUuODQ0ICAgYzQxLjg3OSwwLDc5Ljg1Mi0xMS44MDcsMTEzLjkyMi0zNS40MDVsOTcuOTI5LDk3LjY0MWM2Ljg1Miw3LjIzMSwxNS40MDYsMTAuODQ5LDI1LjY5MywxMC44NDkgICBjOS44OTcsMCwxOC40NjctMy42MTcsMjUuNjk0LTEwLjg0OWM3LjIzLTcuMjMsMTAuODQ4LTE1Ljc5NiwxMC44NDgtMjUuNjkzQzQ3NS4wODgsNDI4LjQ1OCw0NzEuNTY3LDQxOS44ODksNDY0LjUyNCw0MTIuODQ2eiAgICBNMjkxLjM2MywyOTEuMzU4Yy0yNS4wMjksMjUuMDMzLTU1LjE0OCwzNy41NDktOTAuMzY0LDM3LjU0OWMtMzUuMjEsMC02NS4zMjktMTIuNTE5LTkwLjM2LTM3LjU0OSAgIGMtMjUuMDMxLTI1LjAyOS0zNy41NDYtNTUuMTQ0LTM3LjU0Ni05MC4zNmMwLTM1LjIxLDEyLjUxOC02NS4zMzQsMzcuNTQ2LTkwLjM2YzI1LjAyNi0yNS4wMzIsNTUuMTUtMzcuNTQ2LDkwLjM2LTM3LjU0NiAgIGMzNS4yMTIsMCw2NS4zMzEsMTIuNTE5LDkwLjM2NCwzNy41NDZjMjUuMDMzLDI1LjAyNiwzNy41NDgsNTUuMTUsMzcuNTQ4LDkwLjM2QzMyOC45MTEsMjM2LjIxNCwzMTYuMzkyLDI2Ni4zMjksMjkxLjM2MywyOTEuMzU4eiAgICIgZGF0YS1vcmlnaW5hbD0iIzAwMDAwMCIgY2xhc3M9ImFjdGl2ZS1wYXRoIiBkYXRhLW9sZF9jb2xvcj0iIzAwMDAwMCIgc3R5bGU9ImZpbGw6I0ZGRkZGRiI+PC9wYXRoPgo8L2c+PC9nPiA8L3N2Zz4=" );
+  background-repeat: no-repeat;
+  width: 46px;
+  transition: all .1s ease-in-out;
+}
+
+.search > button:hover {
+  cursor: pointer;
+  background-color: #1ebfd5;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+
+body::-webkit-scrollbar-track, .sidebar::-webkit-scrollbar-track {
+  padding: 2px 0;
+  background-color: #000; 
+}
+.sidebar::-webkit-scrollbar-track { background-color: #191919 } 
+
+body::-webkit-scrollbar, .sidebar::-webkit-scrollbar {
+  width: 5px; }
+
+body::-webkit-scrollbar-thumb, .sidebar::-webkit-scrollbar-thumb {
+  background-color: #2f2f2f; }

@@ -1,0 +1,14 @@
+      // Here we define our query as a multi-line string
+      // Storing it in a separate .graphql/.gql file is also possible
+      // SINGLE CHARACTER SEARCH
+
+      // var query = `
+      // query ($search: String) { # Define which variables will be used in the query (id)
+      //   Character (search: $search) { # Insert our variables into the query arguments (id) (type: ANIME is hard-coded in the query)
+      //     id
+      //     name {
+      //       full
+      //     }
+      //   }
+      // }
+      // `;

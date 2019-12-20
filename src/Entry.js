@@ -1,103 +1,188 @@
 import React, { Component } from 'react';
-import './Entry.css';
-import { brotliCompress } from 'zlib';
+import { Redirect } from 'react-router';
+
+import * as api from './utils/api';
+import * as sort from './utils/sort';
+
+import Header from './Header';
+import Conflict from './Conflict';
+
+import './styles/Entry.css';
 
 export class Entry extends Component {
     constructor(props) {
         super(props);
+
         this.state = {
-            sortMethod: "MAGIC",
-            characterList: this.props.data.characters.edges
+            isLoaded: false,            
+            vaId: this.props.match.params.id,
+            sortMethod: this.props.sort,
+            entryData: {},
+            characterList: [],
+            newSearch: false,
+            hasConflict: false,
+            characterName: "",
+            conflictList: []
         };
     }
 
-    sortPopularity(a, b) {
-        var aPopularity = (a.media.length !== 0) ? a.media[0].popularity : 0;
-        var bPopularity = (b.media.length !== 0) ? b.media[0].popularity : 0;
-        
-        if (a.media.length > 1) {
-            a.media.sort((x, y) => y.popularity - x.popularity);
-            aPopularity = a.media[0].popularity;
-        } else if (b.media.length > 1) {
-            b.media.sort((x, y) => y.popularity - x.popularity);
-            bPopularity = b.media[0].popularity;
-        } 
-
-        return  bPopularity - aPopularity;
+    findEntry(vaId) {
+        var variables = { id: vaId }
+        var query = api.ENTRY_QUERY;
+        var [url, options] = api.prepareFetch(query, variables);
+    
+        fetch(url, options).then(api.handleResponse)
+                        .then(this.handleEntryData)
+                        .catch(api.handleError);
     }
 
-    sortRole(a, b) {
-        // Add case for background
-        var aRole = (a.role == "MAIN") ? 1 : 0;
-        var bRole = (b.role == "MAIN") ? 1 : 0;
-        return bRole - aRole;
+    findAddtionalEntry(pageNum) {
+        var variables = { id: this.state.vaId, page: pageNum }
+        var query = api.ADDITIONAL_ENTRY_QUERY;
+        var [url, options] = api.prepareFetch(query, variables);
+    
+        fetch(url, options).then(api.handleResponse)
+                        .then(this.handleAdditionalEntryData)
+                        .catch(api.handleError);
     }
 
-    sortMagic(a, b) {
-        var aPopularity = (a.media.length !== 0) ? a.media[0].popularity : 0;
-        var bPopularity = (b.media.length !== 0) ? b.media[0].popularity : 0;
-
-        // Add case for background
-        var aRole = (a.role == "MAIN") ? 3 : 1;
-        var bRole = (b.role == "MAIN") ? 3 : 1;
-        
-        // Use the most popular media the character is in
-        if (a.media.length > 1) {
-            a.media.sort((x, y) => y.popularity - x.popularity);
-            aPopularity = a.media[0].popularity;
-        } else if (b.media.length > 1) {
-            b.media.sort((x, y) => y.popularity - x.popularity);
-            bPopularity = b.media[0].popularity;
+    handleEntryData = (data) => {
+        // console.log(data.data.Staff.characters.edges)
+        this.setState({ entryData: data.data.Staff, characterList: data.data.Staff.characters.edges });
+        // console.log(this.state);
+        if (data.data.Staff.characters.pageInfo.hasNextPage) {
+          this.findAddtionalEntry(data.data.Staff.characters.pageInfo.currentPage + 1);
+          // console.log("NEED TO FETCH MORE CHARACTERS");
+        } else {
+            this.sortCharacters("MAGIC");
+            this.setState({ isLoaded: true, newSearch: false });
         }
-        
-        // Add # of favorites * 10 to the score
-        aPopularity += a.node.favourites * 10;
-        bPopularity += b.node.favourites * 10;
+      }
+      
 
-        return  (bPopularity * bRole) - (aPopularity * aRole);
+    handleAdditionalEntryData = (data) => {
+        var updatedEntryData = this.state.entryData;
+        for (var c of data.data.Staff.characters.edges) {
+            updatedEntryData.characters.edges.push(c);
+        }
+
+        this.setState({ entryData: updatedEntryData, characterList: updatedEntryData.characters.edges });
+
+        if (data.data.Staff.characters.pageInfo.hasNextPage) {
+            this.findAddtionalEntry(data.data.Staff.characters.pageInfo.currentPage + 1);
+            // console.log("CONTINUE TO FETCH MORE CHARACTERS");
+        } else {
+            this.sortCharacters("MAGIC");
+            this.setState({ isLoaded: true, newSearch: false });
+        }
     }
 
     sortCharacters = (SORT_METHOD) => {
         // console.log(this.state.characterList);
         if (this.state.characterList.length < 2) {
+            // console.log("don't need to sort!")
             this.setState({ sortMethod: SORT_METHOD });
         } else {
             // When sorting by ROLE, also sort by POPULARITY of media
             if (SORT_METHOD == "ROLE") { this.sortCharacters("POPULARITY"); }
             var sortedList = this.state.characterList.sort((a,b) => {
                 switch (SORT_METHOD) {
-                    case "POPULARITY": return this.sortPopularity(a,b);
-                    case "ROLE": return this.sortRole(a,b);
-                    case "MAGIC": return this.sortMagic(a,b);
+                    case "POPULARITY": return sort.sortPopularity(a,b);
+                    case "ROLE": return sort.sortRole(a,b);
+                    case "MAGIC": return sort.sortMagic(a,b);
                 }
             });
 
-            // console.log(sortedList);
-            this.setState({ sortMethod: SORT_METHOD, characterList: sortedList });
+            this.setState({ sortMethod: SORT_METHOD, characterList: sortedList });     
+        }
+    }
+
+
+    /* Header Functions */
+    onConflictClick = (vaId) => { 
+        this.setState({ 
+            vaId: vaId, 
+            hasConflict: false,
+            conflictList: []
+        }); 
+    }
+
+    onVALoaded = (conflict, data) => {
+        // console.log(!conflict);
+        // console.log(data+"");
+        // console.log(this.state.vaId);
+        if (!conflict) { 
+            if (data != this.state.vaId) {
+                this.setState({ 
+                    vaId: data,
+                    hasConflict: false,
+                    conflictList: []
+                });
+            } else {
+                alert("That character is voiced by this person!")
+            }
+        }
+        else {
+            this.setState({
+                hasConflict: true,
+                conflictList: data[0],
+                characterName: data[1]
+            });
         }
     }
 
     componentDidMount() {
-        this.sortCharacters("MAGIC");
+        this.findEntry(this.state.vaId);
+
+        if (this.state.isLoaded) {
+            this.sortCharacters("MAGIC");
+        }
+    }
+
+    componentWillUpdate(nextProps, nextState) {
+        if (this.state.vaId !== nextState.vaId) {
+            this.setState({
+                newSearch: true, 
+                isLoaded: false
+            })
+            this.findEntry(nextState.vaId);
+            if (this.state.isLoaded) {
+                this.sortCharacters("MAGIC");
+            }
+        }
     }
 
     render() {
-        var e = this.props.data;
-        console.log(e);
-        var characters = this.state.characterList.map((char, i) => <EntryCharacter key={i} data={char}/>);
+        var e = this.state.entryData;
+        var va = this.state.isLoaded && !this.state.newSearch ? <div className="va-container">
+            <div className="va-image" style={{backgroundImage:`url(${e.image.large})`}}></div>
+            <div className="va-info">
+                <h1 className="va-name">{e.name.last}, {e.name.first}</h1>
+                <span className="va-desc" dangerouslySetInnerHTML={{__html: e.description}}></span>
+            </div>
+        </div> : "";
+
+        // console.log(this.state.isLoaded && !this.state.newSearch);
+        // console.log(this.state);
+        var characters = (this.state.isLoaded && !this.state.newSearch) ? this.state.characterList.map((char, i) => <EntryCharacter key={i} data={char}/>) : "";
+        
+        var conflict = (this.state.hasConflict) && <Conflict onClick={this.onConflictClick} data={this.state.conflictList} character={this.state.characterName}/>;
+
+        var conflictClass = this.state.hasConflict ? "conflict" : "";
+    
+        if (this.state.newSearch) { 
+            // console.log("REDIRECT!!");
+            return <Redirect push to={`/va/${this.state.vaId}`} />; 
+        }
 
         return (
             <div>
-                <div className="sidebar">
-                    <div className="va-container">
-                        <div className="va-image" style={{backgroundImage:`url(${e.image.large})`}}></div>
-                        <div className="va-info">
-                            <h1 className="va-name">{e.name.last}, {e.name.first}</h1>
-                            <span className="va-desc" dangerouslySetInnerHTML={{__html: e.description}}></span>
-                        </div>
-                    </div>
+                <Header conflict={conflictClass} onReturnVA={this.onVALoaded}/>
+                {conflict}
+                <div className={`sidebar ${conflictClass}`}>
+                    {va}
                 </div>
-                <div className="entry-container">
+                <div className={`entry-container ${conflictClass}`}>
                     <div>
                         <select className="sort" value={this.state.sortMethod} onChange={e => this.sortCharacters(e.target.value)}>
                             <option value="MAGIC">Sort By: Magic</option>
@@ -120,7 +205,7 @@ class EntryCharacter extends Component {
     render() {
         var last = (this.props.data.node.name.last) ? this.props.data.node.name.last + ", " : "";
         var media = this.props.data.media.map((m, i) => `${m.title.romaji}${this.props.data.media[i+1] ? ', ' : ''}`);
-        // console.log(media);
+        // // console.log(media);
 
         return (
             <a target="_blank" className="entry-char" style={{textDecoration: 'none', color: 'inherit'}}key={this.props.data.node.name.first} href={this.props.data.node.siteUrl}>
@@ -135,32 +220,4 @@ class EntryCharacter extends Component {
             </a>
         );
     }
-}
-
-export class Conflict extends Component {
-    handleOnClick = (id) => { this.props.onClick(id); }
-
-    render() {
-        console.log(this.props.data);
-        var vaBlocks = this.props.data.map(va => <ConflictBox key={va.name} name={va.name} image={va.image} media={va.media} id={va.id} onClick={this.handleOnClick}/>);
-
-        return (
-            <div className="conflict-container">
-                <h2>Whoops... it looks like {this.props.character} has been voiced by multiple people! Please select the anime you're referring to!</h2>
-                {vaBlocks}
-            </div>
-        );
-    };
-}
-
-const ConflictBox = (props) => {
-    return (
-        <div className="conflict-box" onClick={ () => props.onClick(props.id) }>
-            <div className="conflict-image" style={{backgroundImage:`url(${props.image})`}}></div>
-            <div className="conflict-info">
-                <p className="conflict-name" >{props.name}</p>
-                {props.media.map(m => <p key={m} className="conflict-media">{m}</p>)}
-            </div>
-        </div>
-    );
 }

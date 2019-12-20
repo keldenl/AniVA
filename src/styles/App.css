@@ -1,4 +1,4 @@
-html,body {
+html, body {
   height:100%;
   color: #dfdfdf;
   background: black;
@@ -10,7 +10,6 @@ html,body {
 }
 
 #root { height: 100%; }
-
 .app { text-align: center; }
 
 .app.home {
@@ -35,6 +34,11 @@ html,body {
   align-items: center;
 }
 
+.header > a {
+  text-decoration: none;
+  color: inherit;
+}
+
 .header.home {
   margin: auto;
   display: table-cell;
@@ -43,7 +47,7 @@ html,body {
   background-color: black;
 }
 
-.header.home > .logo {
+.header.home .logo {
   font-size: 5em;
 }
 
@@ -125,12 +129,6 @@ html,body {
   cursor: pointer;
   background-color: #1ebfd5;
 }
-
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
 
 body::-webkit-scrollbar-track, .sidebar::-webkit-scrollbar-track {
   padding: 2px 0;

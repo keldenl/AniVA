@@ -119,18 +119,20 @@ class EntryCharacter extends Component {
 
     render() {
         var last = (this.props.data.node.name.last) ? this.props.data.node.name.last + ", " : "";
-        var media = this.props.data.media.map(m => m.title.romaji + ", ");
+        var media = this.props.data.media.map((m, i) => `${m.title.romaji}${this.props.data.media[i+1] ? ', ' : ''}`);
         // console.log(media);
 
         return (
-            <div className="entry-char" key={this.props.data.node.name.first}>
+            <a target="_blank" className="entry-char" style={{textDecoration: 'none', color: 'inherit'}}key={this.props.data.node.name.first} href={this.props.data.node.siteUrl}>
+            {/* <div className="entry-char" key={this.props.data.node.name.first}> */}
                 <div className="entry-char-image" style={{backgroundImage:`url(${this.props.data.node.image.medium})`}}></div>
                 <div className="entry-char-info">
                     <h2 className="entry-char-name">{last}{this.props.data.node.name.first}</h2>
                     <span className={`entry-char-role ${this.props.data.role}`}>{this.props.data.role}</span>
                     <p className="entry-char-media">{media}</p>
                 </div>
-            </div>
+            {/* </div> */}
+            </a>
         );
     }
 }

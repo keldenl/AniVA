@@ -65,6 +65,7 @@ query ($id: Int) {
           name { first last }
           image { medium }
           favourites
+          siteUrl
         }
         role
         media {
@@ -92,6 +93,7 @@ query ($id: Int, $page: Int) {
           name { first last }
           image { medium }
           favourites
+          siteUrl
         }
         role
         media {

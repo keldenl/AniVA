@@ -28,7 +28,6 @@ export class Entry extends Component {
     }
 
     findEntry = (vaId) => {
-        this.setState({ isLoaded: false })
         var variables = { id: vaId }
         var query = api.ENTRY_QUERY;
         var [url, options] = api.prepareFetch(query, variables);
@@ -50,7 +49,7 @@ export class Entry extends Component {
 
     handleEntryData = (data) => {
         // console.log(data.data.Staff.characters.edges)
-        this.setState({ entryData: data.data.Staff, characterList: data.data.Staff.characters.edges });
+        this.setState({ isLoaded: false, entryData: data.data.Staff, characterList: data.data.Staff.characters.edges });
         // console.log(this.state);
         if (data.data.Staff.characters.pageInfo.hasNextPage) {
           this.findAddtionalEntry(data.data.Staff.characters.pageInfo.currentPage + 1);
@@ -173,8 +172,9 @@ export class Entry extends Component {
         var conflict = (this.state.hasConflict) && <Conflict onClick={this.onConflictClick} data={this.state.conflictList} character={this.state.characterName}/>;
 
         var conflictClass = this.state.hasConflict ? "conflict" : "";
-    
+        // console.log(this.state);
         if (this.state.newSearch && this.state.isLoaded) {
+            // console.log("REDIRECT!");
             return <Redirect push to={`/va/${this.state.vaId}`} />; 
         }
 

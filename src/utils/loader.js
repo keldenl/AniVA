@@ -13,7 +13,6 @@ export const VA_PROFILE =
     <rect x="20" y="320" width="210" height="17" /> 
     <rect x="20" y="355" width="180" height="7" />
     <rect x="20" y="370" width="160" height="7" />
-
     </ContentLoader>;
 
 export const ENTRY_CHARACTER = [0,1,2,3,4,5].map(idx => {

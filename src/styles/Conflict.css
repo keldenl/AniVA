@@ -2,6 +2,7 @@
 .conflict-container {
     width: 80%;
     margin: 50px auto;
+    text-align: center;
   }
   
   .conflict-container > h2 {

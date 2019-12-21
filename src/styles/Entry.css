@@ -120,6 +120,11 @@
     border-color: #b9b9b9;
 }
 
+.entry-char > svg {
+    height: 160px;
+    width: 100%;
+}
+
 .entry-char-image {
     width: 90px;
     height: 120px;
@@ -171,7 +176,7 @@
 /* Media Queries */
 @media screen and (max-width: 900px) {
     .header {
-        width: 100%;
+        width: calc(100% - 20px);
         margin: 0!important;
     }
     .sidebar {
@@ -195,6 +200,7 @@
     .entry-container {margin-left: 0;}
 }
 
-@media screen and (max-width: 300px) {
-    .entry-char-image { display: none; }
+@media screen and (max-width: 400px) {
+    .entry-char { flex: auto; }
+    /* .entry-char-image { display: none; } */
 }

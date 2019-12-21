@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router';
 
 import * as api from './utils/api';
+import * as loader from './utils/loader';
 import * as sort from './utils/sort';
 
 import Header from './Header';
@@ -26,7 +27,8 @@ export class Entry extends Component {
         };
     }
 
-    findEntry(vaId) {
+    findEntry = (vaId) => {
+        this.setState({ isLoaded: false })
         var variables = { id: vaId }
         var query = api.ENTRY_QUERY;
         var [url, options] = api.prepareFetch(query, variables);
@@ -132,6 +134,8 @@ export class Entry extends Component {
     }
 
     componentDidMount() {
+        // console.log("MOUNTING!!");
+        // console.log(this.state);
         this.findEntry(this.state.vaId);
 
         if (this.state.isLoaded) {
@@ -142,9 +146,11 @@ export class Entry extends Component {
     componentWillUpdate(nextProps, nextState) {
         if (this.state.vaId !== nextState.vaId) {
             this.setState({
-                newSearch: true, 
-                isLoaded: false
-            })
+                newSearch: true
+            });
+            // console.log("UPDATE!!");
+            // console.log(this.state);
+            // console.log(nextState);
             this.findEntry(nextState.vaId);
             if (this.state.isLoaded) {
                 this.sortCharacters("MAGIC");
@@ -160,18 +166,15 @@ export class Entry extends Component {
                 <h1 className="va-name">{e.name.last}, {e.name.first}</h1>
                 <span className="va-desc" dangerouslySetInnerHTML={{__html: e.description}}></span>
             </div>
-        </div> : "";
+        </div> : loader.VA_PROFILE;
 
-        // console.log(this.state.isLoaded && !this.state.newSearch);
-        // console.log(this.state);
-        var characters = (this.state.isLoaded && !this.state.newSearch) ? this.state.characterList.map((char, i) => <EntryCharacter key={i} data={char}/>) : "";
-        
+        var characters = (this.state.isLoaded) ? this.state.characterList.map((char, i) => <EntryCharacter key={i} data={char}/>) : loader.ENTRY_CHARACTER;
+
         var conflict = (this.state.hasConflict) && <Conflict onClick={this.onConflictClick} data={this.state.conflictList} character={this.state.characterName}/>;
 
         var conflictClass = this.state.hasConflict ? "conflict" : "";
     
-        if (this.state.newSearch) { 
-            // console.log("REDIRECT!!");
+        if (this.state.newSearch && this.state.isLoaded) {
             return <Redirect push to={`/va/${this.state.vaId}`} />; 
         }
 

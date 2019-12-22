@@ -158,6 +158,8 @@ export class Entry extends Component {
     }
 
     render() {
+        document.querySelector('body').style.backgroundImage = "";
+
         var e = this.state.entryData;
         var va = this.state.isLoaded && !this.state.newSearch ? <div className="va-container">
             <div className="va-image" style={{backgroundImage:`url(${e.image.large})`}}></div>

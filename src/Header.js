@@ -75,7 +75,7 @@ export default class Header extends Component {
     render() {
         return (
             <div className={`header ${this.props.home} ${this.props.conflict}`}>
-                <Link to="/"><h2 className="logo">AniVA</h2></Link>
+                <Link to="/" onClick={this.props.onReset}><h2 className="logo">AniVA</h2></Link>
                 <div className="sublogo">Created by Kelden. Powered by AniList.</div>
                 <span className="search">
                     <input id="queryBox" placeholder="Search Anime Character (e.g. Goku Son)" autoComplete="off" type="text" onKeyDown={this._handleKeyDown} ></input>

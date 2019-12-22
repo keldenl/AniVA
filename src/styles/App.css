@@ -6,10 +6,17 @@ html, body {
   padding: 0;
   /* color: #333; */
   font-family: "SF Pro Display","SF Pro Icons","Helvetica Neue","Helvetica","Arial",sans-serif;
-  transition: all .1s ease-in-out;
+  /* transition: all .1s ease-in-out; */
+
+  background-size: cover;
+  background-position: center center;
 }
 
-#root { height: 100%; }
+#root { 
+  height: 100%; 
+  background-color: rgba(0,0,0,0.6);
+}
+
 .app { text-align: center; }
 
 .app.home {
@@ -44,8 +51,9 @@ html, body {
   display: table-cell;
   vertical-align: middle;
   text-align: center;
-  background-color: black;
+  background-color: rgba(0,0,0,0);
 }
+
 
 .header.home .logo {
   font-size: 5em;
@@ -55,13 +63,32 @@ html, body {
   height: 46px;
 }
 
+.header.home .search > #queryBox {
+  background-color: rgba(38,38,38,.5);
+  backdrop-filter: blur(10px);
+}
+
+.header.home .search > #queryBox:hover {
+  background-color: rgba(54,54,54,.5);
+}
+
+.header.home .search > button {
+  background-color: rgba(26,168,187,.7);
+}
+
+.header.home .search > button:hover {
+  background-color: rgba(30,191,213,.7);
+}
+
+
 .header.conflict { margin: 0!important; }
 
 .logo { margin: 0; transition: color .35s ease-in-out; }
 .logo:hover { cursor: pointer; color: #1aa8bb; }
 .sublogo {
   margin-bottom: 20px;
-  color: gray;
+  color: white;
+  opacity: .7;
   font-size: .8em;
   display: none;
 }

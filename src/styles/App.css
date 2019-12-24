@@ -1,15 +1,12 @@
 html, body {
   height:100%;
   color: #dfdfdf;
-  background: black;
+  /* background: black; */
   margin: 0;
   padding: 0;
   /* color: #333; */
   font-family: "SF Pro Display","SF Pro Icons","Helvetica Neue","Helvetica","Arial",sans-serif;
   /* transition: all .1s ease-in-out; */
-
-  background-size: cover;
-  background-position: center center;
 }
 
 #root { 
@@ -17,11 +14,24 @@ html, body {
   background-color: rgba(0,0,0,0.6);
 }
 
+.app-container { height: 100%; }
+
+.home-bg {
+  position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background-size: cover;
+    background-position: center center;
+    z-index: -1;
+    filter: blur(25px);
+    transform: scale(1.1);
+}
+
 .app { text-align: center; }
 
 .app.home {
   text-align: center;
-  height: 85%;
+  height: 80%;
   display: table;
   margin: auto;
   width: 70%;

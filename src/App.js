@@ -24,14 +24,20 @@ export default class App extends Component {
 
   componentDidMount() {
     this.updateBgImg();
+
   }
   
   updateBgImg = () => {
     const randNum = (Math.floor(Math.random() * 75));
     this.setState({ bgImg: require(`./img/${randNum}-alt.png`)});
+    let homeBg = document.getElementsByClassName('home-bg')[0];
+    homeBg.style.filter = 'blur(25px)';
 
     var image = new Image();
-    image.onload = (() => this.setState({ bgImg: require(`./img/${randNum}.png`)}));
+    image.onload = (() => { 
+      this.setState({ bgImg: require(`./img/${randNum}.png`)});
+      homeBg.style.filter = 'none';
+    });
     image.src = require(`./img/${randNum}.png`);
   }
 
@@ -65,28 +71,26 @@ export default class App extends Component {
 
     if (this.state.isLoaded) { return <Redirect push to={`/va/${this.state.vaId}`} />; }
 
-    // Background image loading
-    if (this.state.isHome) {
 
-       //   if (!src) return null;
-      //   return <img className="hero" alt={props.alt} src={src} />;
-      // };
-      // const bgImg = require('./img/' + (Math.floor(Math.random() * 75)) + '.png');
-      document.querySelector('body').style.backgroundImage = `url(${this.state.bgImg})`;
-    } else {
-      document.querySelector('body').style.backgroundImage = "";
+    // Background image loading
+    let homeBg = document.getElementsByClassName('home-bg')[0];
+    if (homeBg) {
+      if (this.state.isHome) {
+        homeBg.style.backgroundImage = `url(${this.state.bgImg})`;
+      } else {
+        homeBg.style.backgroundImage = "";
+      }
     }
 
+
+
     return (
-      <div className={`app ${homeClass}`}>
-        <Header home={homeClass} conflict={conflictClass} onReturnVA={this.onVALoaded} onReset={this.resetHome}/>
-        { conflict }
-        {/* <p className="App-intro">
-          Character ID is {this.state.characterId} <br/>
-          Voice Actor ID is {this.state.vaId}
-        </p>
-        <hr/> */}
-        {/* { entry } { conflict } */}
+      <div className="app-container">
+        <div className="home-bg"></div>
+        <div className={`app ${homeClass}`}>
+          <Header home={homeClass} conflict={conflictClass} onReturnVA={this.onVALoaded} onReset={this.resetHome}/>
+          { conflict }
+        </div>
       </div>
     );
   }

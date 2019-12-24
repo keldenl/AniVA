@@ -12,6 +12,7 @@ export default class App extends Component {
     super(props);
     this.state = {
       bgImg: "",
+      bgLoaded: true,
       isHome: true,
       isLoaded: false,
       hasConflict: false,
@@ -24,21 +25,22 @@ export default class App extends Component {
 
   componentDidMount() {
     this.updateBgImg();
-
   }
   
   updateBgImg = () => {
-    const randNum = (Math.floor(Math.random() * 75));
-    this.setState({ bgImg: require(`./img/${randNum}-alt.png`)});
-    let homeBg = document.getElementsByClassName('home-bg')[0];
-    homeBg.style.filter = 'blur(25px)';
-
-    var image = new Image();
-    image.onload = (() => { 
-      this.setState({ bgImg: require(`./img/${randNum}.png`)});
-      homeBg.style.filter = 'none';
-    });
-    image.src = require(`./img/${randNum}.png`);
+    if (this.state.bgLoaded) {
+      const randNum = (Math.floor(Math.random() * 75));
+      this.setState({ bgImg: require(`./img/${randNum}-alt.png`), bgLoaded: false});
+      let homeBg = document.getElementsByClassName('home-bg')[0];
+      homeBg.style.filter = 'blur(25px)';
+  
+      var image = new Image();
+      image.onload = (() => { 
+        this.setState({ bgImg: require(`./img/${randNum}.png`), bgLoaded: true});
+        homeBg.style.filter = 'none';
+      });
+      image.src = require(`./img/${randNum}.png`);
+    }
   }
 
   onConflictClick = (vaId) => { this.setState({ vaId: vaId, isLoaded: true }); }

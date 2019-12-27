@@ -18,7 +18,7 @@ query ($search: String, $page: Int, $perPage: Int) {
 
 export var VA_QUERY = `      
 query ($id: Int) {
-  Character(id: $id) {
+  Character(id: $id) { 
     id
     name { full }
     media {

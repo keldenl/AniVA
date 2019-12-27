@@ -158,7 +158,11 @@ export class Entry extends Component {
     }
 
     render() {
-        document.querySelector('body').style.backgroundImage = "";
+        //document.querySelector('body').style.backgroundImage = "";
+        //document.querySelector('body').background = "black!important";
+        document.getElementById('root').style.backgroundColor = "rgba(0,0,0,0)";
+
+
 
         var e = this.state.entryData;
         var va = this.state.isLoaded && !this.state.newSearch ? <div className="va-container">

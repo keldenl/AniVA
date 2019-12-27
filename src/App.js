@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router';
+import { Link } from 'react-router-dom';
 
+
+import * as api from './utils/api';
 import Header from './Header';
 import Conflict from './Conflict';
 
@@ -19,12 +22,14 @@ export default class App extends Component {
       conflictList: [],
       characterId: -1,
       characterName: "",
-      vaId: -1
+      vaId: -1,
+      funFactData: {}
     }
   }
 
   componentDidMount() {
     this.updateBgImg();
+    this.findFunFact();
   }
   
   updateBgImg = () => {
@@ -58,8 +63,46 @@ export default class App extends Component {
   }
 
   resetHome = () => { 
-    if (this.state.isHome) { this.updateBgImg() }
-    else { window.location.reload() }
+    if (this.state.isHome) { this.updateBgImg(); this.findFunFact(); }
+    else { window.location.reload(); }
+  }
+
+  findFunFact = () => {
+    this.setState({ funFactData: {} });
+    var variables = {};
+    var query = api.FUN_FACT_QUERY;
+    var [url, options] = api.prepareFetch(query, variables);
+
+    fetch(url, options).then(api.handleResponse)
+                        .then(this.handleFactData)
+                        .catch(api.handleError);
+  }
+
+  handleFactData = (data) => {
+    var randNum = (Math.floor(Math.random() * 30));
+    var randVA = data.data.Page.staff[randNum];
+    while (randVA.characters.nodes.length < 2) {
+      randNum = (Math.floor(Math.random() * 30));
+      randVA = data.data.Page.staff[randNum];
+    }
+
+    const randCharOne = (Math.floor(Math.random() * (randVA.characters.nodes.length)));
+    var randCharTwo = (Math.floor(Math.random() * (randVA.characters.nodes.length)));
+    while (randCharTwo === randCharOne) {
+      randCharTwo = (Math.floor(Math.random() * (randVA.characters.nodes.length)));
+    }
+
+    const charOne = randVA.characters.nodes[randCharOne];
+    const charTwo = randVA.characters.nodes[randCharTwo];
+
+    const fact = `${randVA.name.full} voiced both ${charOne.name.full} from ${charOne.media.nodes[0].title.romaji} and ${charTwo.name.full} from ${charTwo.media.nodes[0].title.romaji}?`;
+
+    const factData = {
+      text: fact,
+      id: randVA.id,
+    }
+    
+    this.setState({ funFactData: factData })
   }
 
   render() {
@@ -72,6 +115,10 @@ export default class App extends Component {
     var conflictClass = this.state.hasConflict ? "conflict" : "";
 
     if (this.state.isLoaded) { return <Redirect push to={`/va/${this.state.vaId}`} />; }
+    if (this.state.isHome) { 
+      document.querySelector('body').style.background = "none"; 
+      document.getElementById('root').style.backgroundColor = "rgba(0,0,0,0.6)";
+    }
 
 
     // Background image loading
@@ -79,8 +126,10 @@ export default class App extends Component {
     if (homeBg) {
       if (this.state.isHome) {
         homeBg.style.backgroundImage = `url(${this.state.bgImg})`;
+        document.getElementById('root').style.backgroundColor = "rgba(0,0,0,0.6)";
       } else {
         homeBg.style.backgroundImage = "";
+        document.getElementById('root').style.backgroundColor = "rgba(0,0,0,0)";
       }
     }
 
@@ -91,55 +140,17 @@ export default class App extends Component {
         <div className="home-bg"></div>
         <div className={`app ${homeClass}`}>
           <Header home={homeClass} conflict={conflictClass} onReturnVA={this.onVALoaded} onReset={this.resetHome}/>
+          <Link to={`/va/${this.state.funFactData.id}`}>
+            {this.state.isHome && 
+              <div className="fun-fact-container">
+                <h3> Did you know that...</h3>
+                <p>{Object.keys(this.state.funFactData).length > 0 ? this.state.funFactData.text : <i>This fact is gonna blow your mind!</i>}</p>
+              </div>
+            }
+          </Link>
           { conflict }
         </div>
       </div>
     );
   }
-}
-
-const HeroImage = props => {
-  const src = useProgressiveImage({ 
-    src: props.src,
-    fallbackSrc: props.fallbackSrc 
-  });
-  console.log(src);
-  if (!src) return null;
-  return <img className="hero" alt={props.alt} src={src} />;
-};
-
-function reducer(currentSrc, action) {
-  if (action.type === 'main image loaded') {
-    return action.src;
-  } 
-  if (!currentSrc) {
-    return action.src;
-  }
-  return currentSrc;
-}
-
-function useProgressiveImage({ src, fallbackSrc }) {
-  // const [currentSrc, dispatch] = React.useReducer(reducer, null);
-  // React.useEffect(() => {
-    const mainImage = new Image();
-    const fallbackImage = new Image();
-
-    var loaded = false;
-
-    mainImage.onload = () => {
-      dispatch({ type: 'main image loaded', src });
-      mainImage.src = src;
-
-      loaded = true;
-    };
-    fallbackImage.onload = () => {
-      dispatch({ type: 'fallback image loaded', src: fallbackSrc });
-      fallbackImage.src = fallbackSrc;
-      console.log("fallback loaded")
-      return fallbackImage;
-    };
-
-  // }, [src, fallbackSrc];
-
-  return (loaded) ? mainImage : fallbackImage;
 }

@@ -1,38 +1,45 @@
 /* CONFLICT Styles */
 .conflict-container {
     width: 80%;
-    margin: 50px auto;
+    margin: 80px auto;
     text-align: center;
   }
   
   .conflict-container > h2 {
     font-weight: 500;
+    font-size: 1.25em;
   }
   
   .conflict-box {
-    /* background-color: #eee; */
-    background-color: #1a1a1a;
+    background-color: #222225;
     display: inline-block;
     margin: 5px;
-    /* border-radius: 5px; */
+    border-radius: 2px;
     text-align: left;
     vertical-align: top;
   
-    border: 1px solid rgba(0,0,0,0);
-    transition: all .1s ease-in-out;
+    transition: all .2s ease-in-out;
   }
   
   .conflict-box:hover {
-    border-color: #b9b9b9;
-    /* box-shadow: 0 5px 14px rgba(255,255,255,0.1), 0 2px 5px rgba(255,255,255,0.09); */
+    box-shadow: -2px 0px 16px 4px rgba(12, 12, 14, .8);
     cursor: pointer;
+  }
+
+  .conflict-box:hover .conflict-image {
+    opacity: 1;
+    filter: grayscale(0);
   }
   
   .conflict-image {
     height: 250px;
+    opacity: .9;
+    filter: grayscale(0.35);
     background-position: center center;
     background-size: cover;
     -webkit-mask-image: -webkit-gradient(linear, left 50%, left bottom, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)));
+    transition: all .2s ease-in-out;
+
   }
   
   .conflict-info {

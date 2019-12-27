@@ -101,6 +101,26 @@ query ($id: Int, $page: Int) {
   }
 }`;
 
+export var FUN_FACT_QUERY = `
+{
+  Page (page: 1, perPage: 50) {
+    pageInfo { total }
+    staff(sort: FAVOURITES_DESC) {
+      name{ full }
+      id
+      characters(page: 1, perPage: 15, sort: FAVOURITES_DESC) {
+        nodes {
+          name { full }
+          media (sort: POPULARITY_DESC) {
+            nodes {
+              title { romaji }
+            }
+          }
+        }
+      }
+    }
+  }
+}`;
 
 
 

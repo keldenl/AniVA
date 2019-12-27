@@ -1,6 +1,7 @@
 /* ENTRY Styles */
 .entry-container { 
     margin-left: 250px; 
+    margin-top: 100px;
 }
 
 .sidebar {
@@ -8,7 +9,7 @@
     padding: 0;
     top: 0;
     width: 250px;
-    background-color: #191919;
+    background-color: #222225;
     color: #dfdfdf;
     /* background-color: #222222;
     color: white; */
@@ -85,39 +86,46 @@
     appearance: none;
     outline: none;
     border: none;
-    border-radius: 0;
+    border-radius: 2px;
     box-shadow: none;
     height: 24px;
     padding: 0 12px;
     margin: 0 10px;
-    background-color: #191919;
+    background-color: #222225;
     color: #b9b9b9;
     font-weight: 600;
     margin: 10px;
     right: 1%;
     position: absolute;
     margin-top: -30px;
+    transition: all .2s ease-in-out;
 }
 
-.sort > option { text-transform: capitalize; }
+.sort:hover {
+    box-shadow: -2px 0px 16px 4px rgba(12, 12, 14, .4);
+    cursor: pointer;
+}
 
 .entry-char {
-    background-color: #1a1a1a;
-    border: 1px solid rgba(0,0,0,0);
-    /* background-color: #eee; */
+    background-color: #222225;
+    border-radius: 2px;
     text-align: left;
     vertical-align: top;
     height: 120px;
     margin: 7.5px;
     display: flex;
     flex: 1 0 32%;
-    transition: all .1s ease-in-out;
+    transition: all .2s ease-in-out;
 }
 
 .entry-char:hover {
-    /* box-shadow: 0 5px 14px rgba(0,0,0,0.1), 0 2px 5px rgba(0,0,0,0.09); */
+    box-shadow: -2px 0px 16px 4px rgba(12, 12, 14, .8);
     cursor: pointer;
-    border-color: #b9b9b9;
+}
+
+.entry-char:hover .entry-char-image {
+    opacity: 1;
+    filter: grayscale(0);
 }
 
 .entry-char > svg {
@@ -128,9 +136,12 @@
 .entry-char-image {
     width: 90px;
     height: 120px;
-    opacity: .8;
+    opacity: .9;
+    filter: grayscale(0.35);
+
     background-position: top center;
     background-size: cover;
+    transition: all .2s ease-in-out;
 }
 
 .entry-char-info {
@@ -176,15 +187,15 @@
 /* Media Queries */
 @media screen and (max-width: 900px) {
     .header {
-        width: calc(100% - 20px);
+        width: calc(100% - 40px);
         margin: 0!important;
     }
     .sidebar {
         width: 100%;
         height: auto;
         position: relative;
-        background-color: black;
-        margin-top: 10px;
+        background-color: rgba(0,0,0,0);
+        margin-top: 80px;
     }
     .va-image {
         width: 200px;
@@ -197,7 +208,7 @@
     .va-container { text-align: center; }
     .va-info { text-align: center; margin: 0 0 10px 0; }
     .va-desc { display: none; }
-    .entry-container {margin-left: 0;}
+    .entry-container { margin-left: 0; margin-top: 0; }
 }
 
 @media screen and (max-width: 400px) {

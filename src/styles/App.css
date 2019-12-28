@@ -206,12 +206,16 @@ html, body {
 
 body::-webkit-scrollbar-track, .sidebar::-webkit-scrollbar-track {
   padding: 2px 0;
-  background-color: #000; 
+  background-color: #222225; 
 }
-.sidebar::-webkit-scrollbar-track { background-color: #191919 } 
+.sidebar::-webkit-scrollbar-track { background-color: #222225 } 
 
-body::-webkit-scrollbar, .sidebar::-webkit-scrollbar {
-  width: 5px; }
+body::-webkit-scrollbar, .sidebar::-webkit-scrollbar { width: 7.5px; }
 
 body::-webkit-scrollbar-thumb, .sidebar::-webkit-scrollbar-thumb {
-  background-color: #2f2f2f; }
+  background-color: #2c2c30; 
+}
+
+body::-webkit-scrollbar-thumb:hover, .sidebar::-webkit-scrollbar-thumb:hover {
+  background-color: #323237; 
+}

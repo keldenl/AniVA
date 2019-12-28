@@ -48,12 +48,10 @@ export class Entry extends Component {
     }
 
     handleEntryData = (data) => {
-        // console.log(data.data.Staff.characters.edges)
         this.setState({ isLoaded: false, entryData: data.data.Staff, characterList: data.data.Staff.characters.edges });
-        // console.log(this.state);
+        
         if (data.data.Staff.characters.pageInfo.hasNextPage) {
           this.findAddtionalEntry(data.data.Staff.characters.pageInfo.currentPage + 1);
-          // console.log("NEED TO FETCH MORE CHARACTERS");
         } else {
             this.sortCharacters("MAGIC");
             this.setState({ isLoaded: true, newSearch: false });
@@ -71,7 +69,6 @@ export class Entry extends Component {
 
         if (data.data.Staff.characters.pageInfo.hasNextPage) {
             this.findAddtionalEntry(data.data.Staff.characters.pageInfo.currentPage + 1);
-            // console.log("CONTINUE TO FETCH MORE CHARACTERS");
         } else {
             this.sortCharacters("MAGIC");
             this.setState({ isLoaded: true, newSearch: false });
@@ -79,9 +76,7 @@ export class Entry extends Component {
     }
 
     sortCharacters = (SORT_METHOD) => {
-        // console.log(this.state.characterList);
-        if (this.state.characterList.length < 2) {
-            // console.log("don't need to sort!")
+        if (this.state.characterList.length < 2) { // No sort needed
             this.setState({ sortMethod: SORT_METHOD });
         } else {
             // When sorting by ROLE, also sort by POPULARITY of media
@@ -109,9 +104,6 @@ export class Entry extends Component {
     }
 
     onVALoaded = (conflict, data) => {
-        // console.log(!conflict);
-        // console.log(data+"");
-        // console.log(this.state.vaId);
         if (!conflict) { 
             if (data != this.state.vaId) {
                 this.setState({ 
@@ -133,8 +125,6 @@ export class Entry extends Component {
     }
 
     componentDidMount() {
-        // console.log("MOUNTING!!");
-        // console.log(this.state);
         this.findEntry(this.state.vaId);
 
         if (this.state.isLoaded) {
@@ -147,9 +137,7 @@ export class Entry extends Component {
             this.setState({
                 newSearch: true
             });
-            // console.log("UPDATE!!");
-            // console.log(this.state);
-            // console.log(nextState);
+
             this.findEntry(nextState.vaId);
             if (this.state.isLoaded) {
                 this.sortCharacters("MAGIC");
@@ -158,29 +146,19 @@ export class Entry extends Component {
     }
 
     render() {
-        //document.querySelector('body').style.backgroundImage = "";
-        //document.querySelector('body').background = "black!important";
-        document.getElementById('root').style.backgroundColor = "rgba(0,0,0,0)";
+        // Remove root styles
+        document.getElementById('root').style.backgroundColor = "transparent";
 
-
-
-        var e = this.state.entryData;
-        var va = this.state.isLoaded && !this.state.newSearch ? <div className="va-container">
-            <div className="va-image" style={{backgroundImage:`url(${e.image.large})`}}></div>
-            <div className="va-info">
-                <h1 className="va-name">{e.name.last}, {e.name.first}</h1>
-                <span className="va-desc" dangerouslySetInnerHTML={{__html: e.description}}></span>
-            </div>
-        </div> : loader.VA_PROFILE;
+        var vaData= this.state.entryData;
+        var va = this.state.isLoaded && !this.state.newSearch ? <VAContainer data={vaData}/> : loader.VA_PROFILE;
 
         var characters = (this.state.isLoaded) ? this.state.characterList.map((char, i) => <EntryCharacter key={i} data={char}/>) : loader.ENTRY_CHARACTER;
 
         var conflict = (this.state.hasConflict) && <Conflict onClick={this.onConflictClick} data={this.state.conflictList} character={this.state.characterName}/>;
 
         var conflictClass = this.state.hasConflict ? "conflict" : "";
-        // console.log(this.state);
+
         if (this.state.newSearch && this.state.isLoaded) {
-            // console.log("REDIRECT!");
             return <Redirect push to={`/va/${this.state.vaId}`} />; 
         }
 
@@ -208,13 +186,24 @@ export class Entry extends Component {
     }
 }
 
+const VAContainer = (props) => {
+    return(
+        <div className="va-container">
+            <div className="va-image" style={{backgroundImage:`url(${props.data.image.large})`}}></div>
+            <div className="va-info">
+                <h1 className="va-name">{props.data.name.last}, {props.data.name.first}</h1>
+                <span className="va-desc" dangerouslySetInnerHTML={{__html: props.data.description}}></span>
+            </div>
+        </div>
+    );
+}
+
 class EntryCharacter extends Component {
     constructor(props) { super(props); }
 
     render() {
         var last = (this.props.data.node.name.last) ? this.props.data.node.name.last + ", " : "";
         var media = this.props.data.media.map((m, i) => `${m.title.romaji}${this.props.data.media[i+1] ? ', ' : ''}`);
-        // // console.log(media);
 
         return (
             <a target="_blank" className="entry-char" style={{textDecoration: 'none', color: 'inherit'}}key={this.props.data.node.name.first} href={this.props.data.node.siteUrl}>

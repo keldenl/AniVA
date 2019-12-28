@@ -111,7 +111,7 @@
     border-radius: 2px;
     text-align: left;
     vertical-align: top;
-    height: 120px;
+    height: 100px;
     margin: 7.5px;
     display: flex;
     flex: 1 0 32%;
@@ -135,7 +135,7 @@
 
 .entry-char-image {
     width: 90px;
-    height: 120px;
+    height: 100px;
     opacity: .9;
     filter: grayscale(0.35);
 
@@ -177,9 +177,9 @@
     font-size: .8em;
     letter-spacing: 0.03em;
     font-weight: 300;
-    height: 75px;
+    height: 50px;
 
-    -webkit-mask-image: -webkit-gradient(linear, left 50%, left bottom, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)));
+    -webkit-mask-image: -webkit-gradient(linear, left 30%, left bottom, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)));
 }
 
 

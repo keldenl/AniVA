@@ -28,6 +28,7 @@ export default class App extends Component {
   }
 
   componentDidMount() {
+    document.title = 'AniVA.moe - Anime Voice Actor Database';
     this.updateBgImg();
     this.findFunFact();
   }

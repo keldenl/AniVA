@@ -1,6 +1,6 @@
 export var CHARACTER_QUERY = `
 query ($search: String, $page: Int, $perPage: Int) {
-  Page (page: $page, perPage: $perPage) {
+    Page (page: $page, perPage: $perPage) {
     pageInfo {
       total
       currentPage
@@ -8,9 +8,16 @@ query ($search: String, $page: Int, $perPage: Int) {
       hasNextPage
       perPage
     }
-    characters (search: $search) {
+    characters (search: $search, sort: SEARCH_MATCH) {
       id
       name { full }
+      image { medium }
+      media (sort: POPULARITY_DESC, page: 1, perPage: 1, type: ANIME) {
+        nodes {
+          title { romaji }
+          seasonYear
+        }
+      }
     }
   }
 }
@@ -154,6 +161,6 @@ export function handleData(data) {
 }
 
 export function handleError(error) {
-    alert('An unknown error has occured. Please try again with another character!');
+    alert('An unknown error has occured!');
     console.error(error);
 }

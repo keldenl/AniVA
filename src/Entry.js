@@ -49,6 +49,9 @@ export class Entry extends Component {
 
     handleEntryData = (data) => {
         this.setState({ isLoaded: false, entryData: data.data.Staff, characterList: data.data.Staff.characters.edges });
+
+        let vaName = data.data.Staff.name;
+        document.title = `${vaName.first} ${vaName.last} - AniVA.moe`; // Update page title
         
         if (data.data.Staff.characters.pageInfo.hasNextPage) {
           this.findAddtionalEntry(data.data.Staff.characters.pageInfo.currentPage + 1);
@@ -88,7 +91,6 @@ export class Entry extends Component {
                     case "MAGIC": return sort.sortMagic(a,b);
                 }
             });
-
             this.setState({ sortMethod: SORT_METHOD, characterList: sortedList });     
         }
     }
@@ -125,6 +127,7 @@ export class Entry extends Component {
     }
 
     componentDidMount() {
+        document.title = 'AniVA.moe';
         this.findEntry(this.state.vaId);
 
         if (this.state.isLoaded) {
@@ -149,7 +152,7 @@ export class Entry extends Component {
         // Remove root styles
         document.getElementById('root').style.backgroundColor = "transparent";
 
-        var vaData= this.state.entryData;
+        var vaData = this.state.entryData;
         var va = this.state.isLoaded && !this.state.newSearch ? <VAContainer data={vaData}/> : loader.VA_PROFILE;
 
         var characters = (this.state.isLoaded) ? this.state.characterList.map((char, i) => <EntryCharacter key={i} data={char}/>) : loader.ENTRY_CHARACTER;

@@ -55,6 +55,7 @@ export default class Header extends Component {
     }
 
     onClick = (c) => {
+        console.log(c);
         this.setState({ characterId: c.id, characterName: c.name })
         this.findVA(c.id);
     }
@@ -98,7 +99,9 @@ export default class Header extends Component {
 
     handleCharacterData = (data) => {
         if (data.data.Page) {
-            var updatedList = data.data.Page.characters.filter(c => { return c.media.nodes.length > 0});
+            var updatedList = data.data.Page.characters.filter(c => { 
+                return c.media.nodes.length > 0;
+            });
             this.setState({ suggestionList: updatedList, activeSuggestion: 0, isLoaded: true });
         } else {
             this.setState({ suggestionList: [], activeSuggestion: 0, isLoaded: true });
@@ -108,21 +111,28 @@ export default class Header extends Component {
     handleVAData = (data) => {
         var vas = [];
         var vaList = data.data.Character.media.edges;
+        var success = 0; // Need at least 1 valid voice actor
 
         for (var e of vaList) {
             var currVA = e.voiceActors[0];
             if (currVA && !vas.some(e => e.id === currVA.id)) {
-            vas.push({id: currVA.id, name: currVA.name.full, image: e.node.coverImage.large, media: [e.node.title.romaji]});
+                success++;
+                vas.push({id: currVA.id, name: currVA.name.full, image: e.node.coverImage.large, media: [e.node.title.romaji]});
             } else if (currVA) {
-            var va = vas.filter(e => { return e.id === currVA.id});
-            va[0].media.push(e.node.title.romaji);
-            }
+                success++;
+                var va = vas.filter(e => { return e.id === currVA.id});
+                va[0].media.push(e.node.title.romaji);
+            } 
         }
 
-        if (vas.length > 1) {
-            this.props.onReturnVA(true, [vas, data.data.Character.name.full]);
+        if (success > 0) {
+            if (vas.length > 1) {
+                this.props.onReturnVA(true, [vas, data.data.Character.name.full]);
+            } else {
+                this.props.onReturnVA(false, vas[0].id);
+            }
         } else {
-            this.props.onReturnVA(false, vas[0].id);
+            alert(`ERROR: ${data.data.Character.name.full} isn't voiced in Japanese. Please try again with another character.\nAniVA plans to add non-japanese voice actors in the near future.`);
         }
     }
 
@@ -174,7 +184,7 @@ export default class Header extends Component {
                         }
         
                         return (
-                        <li className={className} key={suggestion.id} onClick={() => this.onClick(suggestion)}>
+                        <li className={className} key={suggestion.id} onMouseDown={() => this.onClick(suggestion)}>
                             <div className="suggestion-img" style={{backgroundImage: `url(${suggestion.image.medium})`}}/>
                             <div className="suggestion-info">
                                 <p className="suggestion-title">{suggestion.name.full}</p> 

@@ -82,7 +82,7 @@ html, body {
 
 .home > .no-suggestions {
   margin: 0 10px;
-  width: calc(70% - 51px);
+  width: calc(70% - 50px);
   max-width: 550px;
 }
 
@@ -116,7 +116,7 @@ html, body {
 .home > .suggestions {
   margin-top: 0;
   margin-left: 10px;
-  width: calc(70% - 51px);
+  width: calc(70% - 50px);
   max-width: 550px;
 }
 

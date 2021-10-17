@@ -3,6 +3,8 @@
     width: 80%;
     margin: 80px auto;
     text-align: center;
+    z-index: 2;
+    position: relative;
   }
   
   .conflict-container > h2 {
@@ -14,7 +16,8 @@
     background-color: #222225;
     display: inline-block;
     margin: 5px;
-    border-radius: 2px;
+    border-radius: 10px;
+    overflow: hidden;
     text-align: left;
     vertical-align: top;
   

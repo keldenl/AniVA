@@ -73,6 +73,11 @@ query ($id: Int) {
         media {
           title { romaji }
           popularity
+          coverImage {
+            medium
+            extraLarge
+          }
+          bannerImage
         }
       }
       
@@ -101,6 +106,11 @@ query ($id: Int, $page: Int) {
         media {
           title { romaji }
           popularity
+          coverImage {
+            medium
+            extraLarge
+          }
+          bannerImage
         }
       }
       

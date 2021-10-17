@@ -17,6 +17,7 @@ export class Entry extends Component {
 
     this.state = {
       isLoaded: false,
+      bgImg: "",
       vaId: this.props.match.params.id,
       vaName: "",
       sortMethod: this.props.sort,
@@ -53,7 +54,8 @@ export class Entry extends Component {
   }
 
   handleEntryData = (data) => {
-    let vaName = data.data.Staff.name;
+    const vaName = data.data.Staff.name;
+    console.log(data.data.Staff.characters.edges);
     this.setState({
       isLoaded: false,
       entryData: data.data.Staff,
@@ -101,16 +103,13 @@ export class Entry extends Component {
       character.role === "MAIN" ? roleCount.main++ : roleCount.supporting++
     );
     roleCount.total = roleCount.main + roleCount.supporting;
-    console.log(roleCount);
+    console.log(this.state.characterList[0].media[0]);
     this.sortCharacters("MAGIC");
     this.setState({ isLoaded: true, newSearch: false, roleCount });
   };
 
   sortCharacters = (SORT_METHOD) => {
-    if (this.state.characterList.length < 2) {
-      // No sort needed
-      this.setState({ sortMethod: SORT_METHOD });
-    } else {
+    if (this.state.characterList.length > 1) {
       // When sorting by ROLE, also sort by POPULARITY of media
       if (SORT_METHOD == "ROLE") {
         this.sortCharacters("POPULARITY");
@@ -125,7 +124,18 @@ export class Entry extends Component {
             return sort.sortMagic(a, b);
         }
       });
-      this.setState({ sortMethod: SORT_METHOD, characterList: sortedList });
+      const mostPopularMedia = sortedList[0].media[0];
+      const { coverImage, bannerImage } = mostPopularMedia;
+      //   console.log(coverImage.extraLarge);
+      //   console.log(bannerImage);
+      this.setState({
+        sortMethod: SORT_METHOD,
+        characterList: sortedList,
+        bgImg: bannerImage || coverImage.extraLarge,
+      });
+    } else {
+      // No sort needed
+      this.setState({ sortMethod: SORT_METHOD });
     }
   };
 
@@ -244,8 +254,15 @@ export class Entry extends Component {
           <meta name="twitter:image" content={logo} />
           <meta name="twitter:card" content="summary" />
         </Helmet>
-        <Header conflict={conflictClass} onReturnVA={this.onVALoaded} />
+        <div className="header-wrapper">
+          <Header conflict={conflictClass} onReturnVA={this.onVALoaded} />
+        </div>
         {conflict}
+        <div
+          className="entry-bg"
+          style={{ backgroundImage: `url(${this.state.bgImg})` }}
+        ></div>
+        <div className="dark-overlay"></div>
         <div className={`sidebar ${conflictClass}`}>{va}</div>
         <div className={`entry-container ${conflictClass}`}>
           <div>
@@ -312,7 +329,6 @@ class EntryCharacter extends Component {
         key={this.props.data.node.name.first}
         href={this.props.data.node.siteUrl}
       >
-        {/* <div className="entry-char" key={this.props.data.node.name.first}> */}
         <div
           className="entry-char-image"
           style={{

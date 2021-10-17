@@ -22,6 +22,7 @@ export class Entry extends Component {
       sortMethod: this.props.sort,
       entryData: {},
       characterList: [],
+      roleCount: {},
       newSearch: false,
       hasConflict: false,
       characterName: "",
@@ -87,7 +88,18 @@ export class Entry extends Component {
       );
     } else {
       this.sortCharacters("MAGIC");
-      this.setState({ isLoaded: true, newSearch: false });
+      // count each role
+      let roleCount = {
+        total: 0,
+        main: 0,
+        supporting: 0,
+      };
+      this.state.characterList.map((character) =>
+        character.role === "MAIN" ? roleCount.main++ : roleCount.supporting++
+      );
+      roleCount.total = roleCount.main + roleCount.supporting;
+      console.log(roleCount);
+      this.setState({ isLoaded: true, newSearch: false, roleCount });
     }
   };
 
@@ -169,9 +181,10 @@ export class Entry extends Component {
     document.getElementById("root").style.backgroundColor = "transparent";
 
     var vaData = this.state.entryData;
+    console.log(vaData);
     var va =
       this.state.isLoaded && !this.state.newSearch ? (
-        <VAContainer data={vaData} />
+        <VAContainer data={vaData} stats={this.state.roleCount} />
       ) : (
         loader.VA_PROFILE
       );
@@ -252,6 +265,10 @@ export class Entry extends Component {
 }
 
 const VAContainer = (props) => {
+  const { main, supporting, total } = props.stats;
+  const { first, last } = props.data.name;
+  const isMale = props.data.gender === "Male";
+  console.log(isMale);
   return (
     <div className="va-container">
       <div
@@ -259,13 +276,15 @@ const VAContainer = (props) => {
         style={{ backgroundImage: `url(${props.data.image.large})` }}
       ></div>
       <div className="va-info">
+        <h4>Voice {isMale ? "Actor" : "Actress"} </h4>
         <h1 className="va-name">
-          {props.data.name.last}, {props.data.name.first}
+          {first} {last}
         </h1>
-        <span
-          className="va-desc"
-          dangerouslySetInnerHTML={{ __html: props.data.description }}
-        ></span>
+        <p className="va-desc">
+          <span>{`${total} Appearances`}</span>
+          <span>{`${main} Main`}</span>
+          <span>{`${supporting} Supporting`}</span>
+        </p>
       </div>
     </div>
   );

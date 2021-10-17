@@ -1,28 +1,16 @@
 /* ENTRY Styles */
-.entry-container { 
-    margin-left: 250px; 
-    margin-top: 100px;
-}
 
 .sidebar {
-    margin: 0;
-    padding: 0;
-    top: 0;
-    width: 250px;
-    background-color: #222225;
     color: #dfdfdf;
-    /* background-color: #222222;
-    color: white; */
-    position: fixed;
-    height: 100%;
     overflow: auto;
+    margin-top: 80px;
     z-index: 2;
 }
 
 .entry-container.conflict, .sidebar.conflict {
     display: none;
 }
-  
+
 .sidebar a {
     color: #19c6dc;
     text-decoration: none;
@@ -33,43 +21,59 @@
 }
 
 /* Voice Actor */
+
 .va-container {
     margin: auto;
+    display: flex;
+    margin: 10px 20px;
 }
 
 .va-image {
-    width: 100%;
-    background-position: top center;
+    width: 125px;
+    height: 125px;
+    border-radius: 100%;
+    background-position: center center;
     background-size: cover;
-    height: 300px;
     margin: auto;
     display: inline-block;
-    -webkit-mask-image: -webkit-gradient(linear, left 50%, left bottom, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)));
 }
 
 .va-info {
     text-align: left;
     margin: 20px;
+    flex-grow: 2;
 }
 
-.va-info > * {
+.va-info>* {
     word-break: break-word;
 }
 
+.va-role {
+    font-size: 1.25em;
+    font-weight: 400;
+    margin: 0;
+}
+
 .va-name {
-    font-size: 1.5em;
+    font-size: 2.5em;
+    text-transform: uppercase;
     display: inline-block;
     margin: 0;
 }
 
 .va-desc {
     font-weight: 300;
-    font-size: .9em;
     letter-spacing: 0.03em;
     line-height: 1.2;
+    margin: 10px 0 0 0;
+}
+
+.va-desc>span {
+    margin-right: 15px;
 }
 
 /* Character List */
+
 .entry-char-container {
     display: flex;
     flex-direction: row;
@@ -107,14 +111,13 @@
 }
 
 .entry-char {
-    background-color: #222225;
+    width: 150px;
     border-radius: 2px;
     text-align: left;
     vertical-align: top;
-    height: 100px;
     margin: 7.5px;
     display: flex;
-    flex: 1 0 32%;
+    flex-direction: column;
     transition: all .2s ease-in-out;
 }
 
@@ -128,17 +131,17 @@
     filter: grayscale(0);
 }
 
-.entry-char > svg {
+.entry-char>svg {
     height: 160px;
     width: 100%;
 }
 
 .entry-char-image {
-    width: 90px;
-    height: 100px;
+    width: 100%;
+    height: 200px;
     opacity: .9;
+    border-radius: 10px;
     filter: grayscale(0.35);
-
     background-position: top center;
     background-size: cover;
     transition: all .2s ease-in-out;
@@ -147,7 +150,7 @@
 .entry-char-info {
     flex-shrink: 99;
     overflow: hidden;
-    margin: 10px 20px;
+    margin: 10px 0;
 }
 
 .entry-char-name {
@@ -166,9 +169,17 @@
     margin-left: 4px;
 }
 
-.entry-char-role.MAIN { background-color: #4CAF50; }
-.entry-char-role.SUPPORTING { background-color: #19a8ba; }
-.entry-char-role.BACKGROUND { background-color: #aaa; }
+.entry-char-role.MAIN {
+    background-color: #4CAF50;
+}
+
+.entry-char-role.SUPPORTING {
+    background-color: #19a8ba;
+}
+
+.entry-char-role.BACKGROUND {
+    background-color: #aaa;
+}
 
 .entry-char-media {
     margin: 0;
@@ -178,13 +189,11 @@
     letter-spacing: 0.03em;
     font-weight: 300;
     height: 50px;
-
-    -webkit-mask-image: -webkit-gradient(linear, left 30%, left bottom, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)));
+    -webkit-mask-image: -webkit-gradient(linear, left 30%, left bottom, from(rgba(0, 0, 0, 1)), to(rgba(0, 0, 0, 0)));
 }
 
-
-
 /* Media Queries */
+
 @media screen and (max-width: 900px) {
     .header {
         width: calc(100% - 40px);
@@ -194,7 +203,7 @@
         width: 100%;
         height: auto;
         position: relative;
-        background-color: rgba(0,0,0,0);
+        background-color: rgba(0, 0, 0, 0);
         margin-top: 80px;
     }
     .va-image {
@@ -205,16 +214,30 @@
         background-position: center center;
         -webkit-mask-image: none;
     }
-    .va-container { text-align: center; }
-    .va-info { text-align: center; margin: 0 0 10px 0; }
-    .va-desc { display: none; }
-    .entry-container { margin-left: 0; margin-top: 0; }
-    div:not(.home) > .suggestions { backdrop-filter: blur(80px); }
+    .va-container {
+        text-align: center;
+    }
+    .va-info {
+        text-align: center;
+        margin: 0 0 10px 0;
+    }
+    .va-desc {
+        display: none;
+    }
+    .entry-container {
+        margin-left: 0;
+        margin-top: 0;
+    }
+    div:not(.home)>.suggestions {
+        backdrop-filter: blur(80px);
+    }
 }
 
 @media screen and (max-width: 400px) {
-    .entry-char { flex: auto; }
-    div:not(.home) > .suggestions {
+    .entry-char {
+        flex: auto;
+    }
+    div:not(.home)>.suggestions {
         max-height: 500px;
         margin-top: 268px;
     }

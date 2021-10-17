@@ -66,8 +66,7 @@ export class Entry extends Component {
         data.data.Staff.characters.pageInfo.currentPage + 1
       );
     } else {
-      this.sortCharacters("MAGIC");
-      this.setState({ isLoaded: true, newSearch: false });
+      this.finishLoad();
     }
   };
 
@@ -87,20 +86,24 @@ export class Entry extends Component {
         data.data.Staff.characters.pageInfo.currentPage + 1
       );
     } else {
-      this.sortCharacters("MAGIC");
-      // count each role
-      let roleCount = {
-        total: 0,
-        main: 0,
-        supporting: 0,
-      };
-      this.state.characterList.map((character) =>
-        character.role === "MAIN" ? roleCount.main++ : roleCount.supporting++
-      );
-      roleCount.total = roleCount.main + roleCount.supporting;
-      console.log(roleCount);
-      this.setState({ isLoaded: true, newSearch: false, roleCount });
+      this.finishLoad();
     }
+  };
+
+  finishLoad = () => {
+    // count each role
+    let roleCount = {
+      total: 0,
+      main: 0,
+      supporting: 0,
+    };
+    this.state.characterList.map((character) =>
+      character.role === "MAIN" ? roleCount.main++ : roleCount.supporting++
+    );
+    roleCount.total = roleCount.main + roleCount.supporting;
+    console.log(roleCount);
+    this.sortCharacters("MAGIC");
+    this.setState({ isLoaded: true, newSearch: false, roleCount });
   };
 
   sortCharacters = (SORT_METHOD) => {
@@ -181,7 +184,6 @@ export class Entry extends Component {
     document.getElementById("root").style.backgroundColor = "transparent";
 
     var vaData = this.state.entryData;
-    console.log(vaData);
     var va =
       this.state.isLoaded && !this.state.newSearch ? (
         <VAContainer data={vaData} stats={this.state.roleCount} />
@@ -268,7 +270,6 @@ const VAContainer = (props) => {
   const { main, supporting, total } = props.stats;
   const { first, last } = props.data.name;
   const isMale = props.data.gender === "Male";
-  console.log(isMale);
   return (
     <div className="va-container">
       <div
@@ -276,7 +277,7 @@ const VAContainer = (props) => {
         style={{ backgroundImage: `url(${props.data.image.large})` }}
       ></div>
       <div className="va-info">
-        <h4>Voice {isMale ? "Actor" : "Actress"} </h4>
+        <h4 className="va-role">Voice {isMale ? "Actor" : "Actress"} </h4>
         <h1 className="va-name">
           {first} {last}
         </h1>

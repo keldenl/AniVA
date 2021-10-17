@@ -249,7 +249,7 @@ export class Entry extends Component {
         <div className={`sidebar ${conflictClass}`}>{va}</div>
         <div className={`entry-container ${conflictClass}`}>
           <div>
-            <select
+            {/* <select
               className="sort"
               value={this.state.sortMethod}
               onChange={(e) => this.sortCharacters(e.target.value)}
@@ -257,7 +257,7 @@ export class Entry extends Component {
               <option value="MAGIC">Sort By: Magic</option>
               <option value="POPULARITY">Sort By: Anime Popularity</option>
               <option value="ROLE">Sort By: Role</option>
-            </select>
+            </select> */}
             <div className="entry-char-container">{characters}</div>
           </div>
         </div>
@@ -318,15 +318,16 @@ class EntryCharacter extends Component {
           style={{
             backgroundImage: `url(${this.props.data.node.image.medium})`,
           }}
-        ></div>
+        >
+          <span className={`entry-char-role ${this.props.data.role}`}>
+            {this.props.data.role}
+          </span>
+        </div>
         <div className="entry-char-info">
           <h2 className="entry-char-name">
             {last}
             {this.props.data.node.name.first}
           </h2>
-          <span className={`entry-char-role ${this.props.data.role}`}>
-            {this.props.data.role}
-          </span>
           <p className="entry-char-media">{media}</p>
         </div>
         {/* </div> */}

@@ -3,7 +3,8 @@
 .sidebar {
     color: #dfdfdf;
     overflow: auto;
-    margin-top: 80px;
+    margin-top: calc(36px + 50px);
+    margin-bottom: 50px;
     z-index: 2;
 }
 
@@ -166,7 +167,7 @@
     font-size: .6em;
     padding: 4px 10px 3px 10px;
     border-radius: 10px;
-    margin-left: 4px;
+    margin-left: 2px;
 }
 
 .entry-char-role.MAIN {

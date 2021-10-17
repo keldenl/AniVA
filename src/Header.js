@@ -312,7 +312,7 @@ export default class Header extends Component {
             autoComplete="off"
             type="text"
             onFocus={() => this.setState({ showSuggestions: true })}
-            onBlur={() => this.setState({ showSuggestions: true })}
+            onBlur={() => this.setState({ showSuggestions: false })}
             onChange={this.onChange}
             onKeyDown={this._handleKeyDown}
             ref={(input) => (this.searchInput = input)}

@@ -1,8 +1,7 @@
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 import App from './App'
-import {Entry} from './Entry';
-
+import { Entry } from './Entry';
 
 export default function Main() {
     return (

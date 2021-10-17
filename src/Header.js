@@ -20,6 +20,8 @@ export default class Header extends Component {
             scrollDownwards: true 
         }
         this.timer = null;
+        // this.returnString = "";
+        // this.allPage = 1;
     }
 
     handleCheck = () => {
@@ -55,10 +57,42 @@ export default class Header extends Component {
     }
 
     onClick = (c) => {
-        console.log(c);
+        //console.log(c);
         this.setState({ characterId: c.id, characterName: c.name })
         this.findVA(c.id);
     }
+
+    // // For testing purposes only
+    // getAllVA = (pageNum) => {
+    //     var variables = {
+    //         page: pageNum
+    //     };
+
+    //     var query = api.ALL_VA_QUERY;
+    //     var [url, options] = api.prepareFetch(query, variables);
+
+    //     fetch(url, options).then(api.handleResponse)
+    //                         .then(this.handleAllVAData)
+    //                         .catch(this.handleError);
+    // }
+
+    // handleAllVAData = (data) => {
+    //     console.log(data.data.Page.staff);
+    //     for (var d of data.data.Page.staff) {
+    //         if (d.characters.edges.length > 0) {
+    //             console.log(d.favourites)
+    //             this.returnString += `"/va/${d.id}",`
+    //         } else {
+    //             console.log(d.id + " is not a voice actor")
+    //         }
+    //     }
+    //     console.log(this.returnString);
+
+    //     this.allPage++;
+    //     if (this.allPage <= 100) {
+    //         this.getAllVA(this.allPage);
+    //     }
+    // }
 
     searchCharacter = () => {
         var charName = this.state.userInput;
@@ -136,6 +170,10 @@ export default class Header extends Component {
         }
     }
 
+    // componentDidMount() {
+    //     this.getAllVA(this.allPage);
+    // }
+
     componentWillUpdate (prevProps, prevState) {
         if(prevState.userInput !== this.state.userInput) {
             this.handleCheck();
@@ -195,7 +233,8 @@ export default class Header extends Component {
                     })}
                     </ul>
                 );
-            } else {
+            } 
+            else {
                 let loadingImg = require(`./img/loading.gif`)
                 let loading = <span><em> Looking for that character...</em><img className="loading-image" src={loadingImg}/></span>;
                 var suggestionsListComponent = (
@@ -204,12 +243,15 @@ export default class Header extends Component {
                     </div>
                 );
             }
-          }
+        }
+
+        let logo = require(`./img/logo.png`);
 
         return (
             <div className={`header ${this.props.home} ${this.props.conflict}`}>
-                <Link to="/" onClick={this.props.onReset}><h2 className="logo">AniVA</h2></Link>
-                <div className="sublogo">Created by Kelden. Powered by AniList.</div>
+                {/* <h2 className="logo">animeVA</h2> */}
+                <Link to="/" onClick={this.props.onReset}><img className="logo" src={logo}/></Link>
+                <div className="sublogo">Created by <a target="_blank" href="http://keldenl.com">Kelden</a>. Powered by <a target="_blank" href="http://anilist.co/">AniList</a>.</div>
                 <span className="search">
                     <input id="queryBox" placeholder="Search Anime Character (e.g. Goku Son)" autoComplete="off" type="text" onFocus={() => this.setState({showSuggestions: true})} onBlur={() => this.setState({showSuggestions: false})} onChange={this.onChange} onKeyDown={this._handleKeyDown} ref={input => this.searchInput = input}></input>
                 </span>

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
+import { Helmet } from "react-helmet";
 
 
 import * as api from './utils/api';
@@ -28,7 +29,6 @@ export default class App extends Component {
   }
 
   componentDidMount() {
-    document.title = 'AniVA.moe - Anime Voice Actor Database';
     this.updateBgImg();
     this.findFunFact();
   }
@@ -107,9 +107,6 @@ export default class App extends Component {
   }
 
   render() {
-    // console.log("rerender")
-    // console.log(this.state);
-
     var conflict = (this.state.hasConflict) && <Conflict onClick={this.onConflictClick} data={this.state.conflictList} character={this.state.characterName}/>;
 
     var homeClass = this.state.isHome ? "home" : "";
@@ -134,10 +131,31 @@ export default class App extends Component {
       }
     }
 
-
+    // Helmet variables
+    let url = "https://animeva.moe/";
+    let title = "animeVA.moe - Anime Voice Actor Database";
+    let description = "Find and discover anime character voice actors with animeVA, the world'&#039;'s smartest and most intuitive anime voice actor database yet. You'll be shocked when you realize your favorite characters are voiced by the same person!";
+    let logo = require(`./img/logo.png`);
 
     return (
       <div className="app-container">
+        <Helmet>
+             {/* General tags */}
+            <title>{title}</title>
+            <meta name="description" content={description} />
+            {/* OpenGraph tags */}
+            <meta name="og:url" content={url} />
+            <meta name="og:title" content={title} />
+            <meta name="og:description" content={description} />
+            <meta name="og:image" content={logo} />
+            <meta name="og:type" content="website" />
+            {/* Twitter Card tags */}
+            <meta name="twitter:title" content={title} />
+            <meta name="twitter:description" content={description} />
+            <meta name="twitter:image" content={logo} />
+            <meta name="twitter:card" content="summary" />
+        </Helmet>
+
         <div className="home-bg"></div>
         <div className={`app ${homeClass}`}>
           <Header home={homeClass} conflict={conflictClass} onReturnVA={this.onVALoaded} onReset={this.resetHome}/>

@@ -55,7 +55,6 @@ export class Entry extends Component {
 
   handleEntryData = (data) => {
     const vaName = data.data.Staff.name;
-    console.log(data.data.Staff.characters.edges);
     this.setState({
       isLoaded: false,
       entryData: data.data.Staff,
@@ -103,7 +102,6 @@ export class Entry extends Component {
       character.role === "MAIN" ? roleCount.main++ : roleCount.supporting++
     );
     roleCount.total = roleCount.main + roleCount.supporting;
-    console.log(this.state.characterList[0].media[0]);
     this.sortCharacters("MAGIC");
     this.setState({ isLoaded: true, newSearch: false, roleCount });
   };

@@ -4,6 +4,9 @@ import { Link } from "react-router-dom";
 
 import * as api from "./utils/api";
 
+import logo from './img/logo.png';
+import loadingImg from './img/loading.gif';
+
 import "./styles/App.css";
 
 export default class Header extends Component {
@@ -271,7 +274,6 @@ export default class Header extends Component {
           </ul>
         );
       } else {
-        let loadingImg = require(`./img/loading.gif`);
         let loading = (
           <span>
             <em> Looking for that character...</em>
@@ -285,8 +287,6 @@ export default class Header extends Component {
         );
       }
     }
-
-    let logo = require(`./img/logo.png`);
 
     return (
       <div className={`header ${this.props.home} ${this.props.conflict}`}>

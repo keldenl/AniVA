@@ -7,9 +7,15 @@ import { Helmet } from "react-helmet";
 import * as api from './utils/api';
 import Header from './Header';
 import Conflict from './Conflict';
+import logo from './img/logo.png';
 
 import './styles/App.css';
 
+function importAll(r) {
+  let images = {};
+  r.keys().map((item, index) => { images[item.replace('./', '')] = r(item); });
+  return images;
+}
 
 export default class App extends Component {
   constructor(props) {
@@ -24,28 +30,34 @@ export default class App extends Component {
       characterId: -1,
       characterName: "",
       vaId: -1,
-      funFactData: {}
+      funFactData: {},
+      images: []
     }
   }
 
   componentDidMount() {
-    this.updateBgImg();
+    this.setState({ images: importAll(require.context('./img/', false, /\.(png|jpe?g|svg)$/)) }, this.updateBgImg);
+    // this.updateBgImg();
     this.findFunFact();
   }
-  
+
   updateBgImg = () => {
-    if (this.state.bgLoaded) {
+    if (this.state.bgLoaded && this.state.images) {
       const randNum = (Math.floor(Math.random() * 75));
-      this.setState({ bgImg: require(`./img/${randNum}-alt.png`), bgLoaded: false});
+      const imgAlt = this.state.images[`${randNum}-alt.png`].default;
+      const imgDef = this.state.images[`${randNum}.png`].default;
+      this.setState({
+        bgImg: imgAlt, bgLoaded: false
+      });
       let homeBg = document.getElementsByClassName('home-bg')[0];
       homeBg.style.filter = 'blur(25px)';
-  
+
       var image = new Image();
-      image.onload = (() => { 
-        this.setState({ bgImg: require(`./img/${randNum}.png`), bgLoaded: true});
+      image.onload = (() => {
+        this.setState({ bgImg: imgDef, bgLoaded: true });
         homeBg.style.filter = 'none';
       });
-      image.src = require(`./img/${randNum}.png`);
+      image.src = imgDef;
     }
   }
 
@@ -63,7 +75,7 @@ export default class App extends Component {
     }
   }
 
-  resetHome = () => { 
+  resetHome = () => {
     if (this.state.isHome) { this.updateBgImg(); this.findFunFact(); }
     else { window.location.reload(); }
   }
@@ -75,8 +87,8 @@ export default class App extends Component {
     var [url, options] = api.prepareFetch(query, variables);
 
     fetch(url, options).then(api.handleResponse)
-                        .then(this.handleFactData)
-                        .catch(api.handleError);
+      .then(this.handleFactData)
+      .catch(api.handleError);
   }
 
   handleFactData = (data) => {
@@ -102,19 +114,19 @@ export default class App extends Component {
       text: fact,
       id: randVA.id,
     }
-    
+
     this.setState({ funFactData: factData })
   }
 
   render() {
-    var conflict = (this.state.hasConflict) && <Conflict onClick={this.onConflictClick} data={this.state.conflictList} character={this.state.characterName}/>;
+    var conflict = (this.state.hasConflict) && <Conflict onClick={this.onConflictClick} data={this.state.conflictList} character={this.state.characterName} />;
 
     var homeClass = this.state.isHome ? "home" : "";
     var conflictClass = this.state.hasConflict ? "conflict" : "";
 
     if (this.state.isLoaded) { return <Redirect push to={`/va/${this.state.vaId}`} />; }
-    if (this.state.isHome) { 
-      document.querySelector('body').style.background = "none"; 
+    if (this.state.isHome) {
+      document.querySelector('body').style.background = "none";
       document.getElementById('root').style.backgroundColor = "rgba(0,0,0,0.6)";
     }
 
@@ -135,39 +147,38 @@ export default class App extends Component {
     let url = "https://animeva.moe/";
     let title = "animeVA.moe - Anime Voice Actor Database";
     let description = "Find and discover anime character voice actors with animeVA, the world'&#039;'s smartest and most intuitive anime voice actor database yet. You'll be shocked when you realize your favorite characters are voiced by the same person!";
-    let logo = require(`./img/logo.png`);
 
     return (
       <div className="app-container">
         <Helmet>
-             {/* General tags */}
-            <title>{title}</title>
-            <meta name="description" content={description} />
-            {/* OpenGraph tags */}
-            <meta name="og:url" content={url} />
-            <meta name="og:title" content={title} />
-            <meta name="og:description" content={description} />
-            <meta name="og:image" content={logo} />
-            <meta name="og:type" content="website" />
-            {/* Twitter Card tags */}
-            <meta name="twitter:title" content={title} />
-            <meta name="twitter:description" content={description} />
-            <meta name="twitter:image" content={logo} />
-            <meta name="twitter:card" content="summary" />
+          {/* General tags */}
+          <title>{title}</title>
+          <meta name="description" content={description} />
+          {/* OpenGraph tags */}
+          <meta name="og:url" content={url} />
+          <meta name="og:title" content={title} />
+          <meta name="og:description" content={description} />
+          <meta name="og:image" content={logo} />
+          <meta name="og:type" content="website" />
+          {/* Twitter Card tags */}
+          <meta name="twitter:title" content={title} />
+          <meta name="twitter:description" content={description} />
+          <meta name="twitter:image" content={logo} />
+          <meta name="twitter:card" content="summary" />
         </Helmet>
 
         <div className="home-bg"></div>
         <div className={`app ${homeClass}`}>
-          <Header home={homeClass} conflict={conflictClass} onReturnVA={this.onVALoaded} onReset={this.resetHome}/>
+          <Header home={homeClass} conflict={conflictClass} onReturnVA={this.onVALoaded} onReset={this.resetHome} />
           <Link to={`/va/${this.state.funFactData.id}`}>
-            {this.state.isHome && 
+            {this.state.isHome &&
               <div className="fun-fact-container">
                 <h3> Did you know that...</h3>
                 <p>{Object.keys(this.state.funFactData).length > 0 ? this.state.funFactData.text : <i>This fact is gonna blow your mind!</i>}</p>
               </div>
             }
           </Link>
-          { conflict }
+          {conflict}
         </div>
       </div>
     );

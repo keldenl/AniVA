@@ -8,6 +8,8 @@ import * as sort from "./utils/sort";
 
 import Header from "./Header";
 import Conflict from "./Conflict";
+import logo from './img/logo.png';
+
 
 import "./styles/Entry.css";
 
@@ -232,7 +234,6 @@ export class Entry extends Component {
     let description = this.state.isLoaded
       ? `Learn what famous anime characters ${voiceActorName.first} ${voiceActorName.last} has voiced! animeVA is the world's smartest and most intuitive anime voice actor database yet. You'll be shocked when you realize your favorite characters are voiced by the same person!`
       : `animeVA is the world's smartest and most intuitive anime voice actor database yet. You'll be shocked when you realize your favorite characters are voiced by the same person!`;
-    let logo = require(`./img/logo.png`);
 
     return (
       <div>

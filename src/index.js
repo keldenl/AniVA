@@ -12,8 +12,8 @@ const app = (
     <Main />
   </BrowserRouter>
 )
-if (rootElement.hasChildNodes()) {
-  hydrate(app, rootElement);
-} else {
+// if (rootElement.hasChildNodes()) {
+  // hydrate(app, rootElement);
+// } else {
   render(app, rootElement);
-}
+// }

@@ -13,7 +13,7 @@ import './styles/App.css';
 
 function importAll(r) {
   let images = {};
-  r.keys().map((item, index) => { images[item.replace('./', '')] = r(item); });
+  r.keys().map((item) => { images[item.replace('./', '')] = r(item); });
   return images;
 }
 
@@ -37,7 +37,6 @@ export default class App extends Component {
 
   componentDidMount() {
     this.setState({ images: importAll(require.context('./img/', false, /\.(png|jpe?g|svg)$/)) }, this.updateBgImg);
-    // this.updateBgImg();
     this.findFunFact();
   }
 

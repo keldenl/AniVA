@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router";
 import { Helmet } from "react-helmet";
+import ReactGA from 'react-ga';
 
 import * as api from "./utils/api";
 import * as loader from "./utils/loader";
@@ -31,6 +32,9 @@ export class Entry extends Component {
       characterName: "",
       conflictList: [],
     };
+
+    const pathname = props.location.pathname;
+    ReactGA.pageview(pathname);
   }
 
   findEntry = (vaId) => {

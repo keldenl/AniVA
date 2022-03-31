@@ -3,7 +3,6 @@ import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
 import { Helmet } from "react-helmet";
 
-
 import * as api from './utils/api';
 import Header from './Header';
 import Conflict from './Conflict';
